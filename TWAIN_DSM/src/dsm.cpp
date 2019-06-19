@@ -3893,8 +3893,9 @@ void* DSM_LoadFunction(void* _pHandle, const char* _pszSymbol)
 {
   void* pRet = 0;
 #if (TWNDSM_OS == TWNDSM_OS_MACOSX)
-  pRet = CFBundleGetFunctionPointerForName((CFBundleRef)_pHandle,
-					   CFStringCreateWithCStringNoCopy(0, _pszSymbol, kCFStringEncodingUTF8, 0));
+  CFStringRef cfString = CFStringCreateWithCString(kCFAllocatorDefault, _pszSymbol, kCFStringEncodingUTF8);
+  pRet = CFBundleGetFunctionPointerForName((CFBundleRef)_pHandle, cfString);
+  CFRelease(cfString);
 #else
 
   #if (TWNDSM_CMP == TWNDSM_CMP_GNUGPP)
